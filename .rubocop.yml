@@ -1,0 +1,36 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 2.6
+  TargetRailsVersion: 6.0
+  Exclude:
+    - db/schema.rb
+
+Rails:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - describe
+    - context
+    - define
+    - factory
+  Exclude:
+    - 'config/**/*.rb'
+    - 'db/migrate/*.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*.rb'
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
