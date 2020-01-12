@@ -1,0 +1,50 @@
+version: '3'
+
+volumes:
+  postgres:
+  elasticsearch:
+
+services:
+  db:
+    image: postgres:latest
+    expose:
+      - 5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./db/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+
+  server_app: &server_app
+    build:
+      context: .
+    command: bundle exec rails server --binding 0.0.0.0
+    entrypoint: "./docker-entrypoint.sh"
+    volumes:
+      - ./app:/home/www/book-api/app
+    tty: true
+    stdin_open: true
+    environment:
+      RAILS_ENV: development
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: book_api_development
+      DB_USER: postgres
+      DB_PASSWOD: postrgres
+      ELASTICSEARCH_URL: http://localhost:9200
+    depends_on:
+      - db
+      - elasticsearch
+    ports:
+      - 3000:3000
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    expose:
+      - 9200
