@@ -1,8 +1,7 @@
 default: &default
   adapter: postgresql
-  database: <%= ENV['DB_NAME'] %>
   encoding: unicode
-  pool: <%= ENV.fetch("DB_POOL") { 15 } %>
+  pool: <%= ENV.fetch('DB_POOL') { 15 } %>
   host: <%= ENV.fetch('DB_HOST') { 'localhost' } %>
   username: <%= ENV.fetch('DB_USER') { 'postgres' } %>
   password: <%= ENV.fetch('DB_PASSWORD') { 'postgres' } %>
@@ -10,9 +9,11 @@ default: &default
 
 development:
   <<: *default
+  database: <%= ENV.fetch('DB_NAME') { 'book_api_development' } %>
 
 test:
   <<: *default
+  database: book_api_test
 
 staging:
   <<: *default
