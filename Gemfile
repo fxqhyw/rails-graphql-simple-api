@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.5'
 
 gem 'bcrypt', '~> 3.1.13'
+gem 'graphql', '~> 1.9.17'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rack-cors', '~> 1.1.1'
@@ -23,6 +24,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'graphiql-rails', '~> 1.7.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'rubocop', '~> 0.79', require: false
   gem 'rubocop-performance', '~> 1.5.2', require: false
