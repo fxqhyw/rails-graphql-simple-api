@@ -5,6 +5,7 @@ ruby '2.6.5'
 
 gem 'bcrypt', '~> 3.1.13'
 gem 'graphql', '~> 1.9.17'
+gem 'jwt', '~> 2.2.1'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rack-cors', '~> 1.1.1'
