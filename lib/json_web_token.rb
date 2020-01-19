@@ -9,6 +9,6 @@ class JsonWebToken
   end
 
   def self.decode(token)
-    JWT.decode(token, SECRET_KEY)
+    JWT.decode(token, SECRET_KEY)[0]
   end
 end
