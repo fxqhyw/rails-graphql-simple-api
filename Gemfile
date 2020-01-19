@@ -19,7 +19,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   gem 'bullet', '~> 6.0.2'
-  gem 'faker', github: 'faker-ruby/faker', branch: 'master'
+  gem 'faker', '~> 2.10.1'
   gem 'pry-byebug', '~> 3.7.0'
   gem 'rspec-rails', '~> 3.9.0'
 end
