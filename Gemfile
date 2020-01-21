@@ -38,6 +38,7 @@ end
 group :test do
   gem 'database_cleaner', '~> 1.7.0'
   gem 'factory_bot_rails', '~> 5.1.1'
+  gem 'rspec-graphql_matchers', '~> 1.1'
   gem 'shoulda-matchers', '~> 4.2.0'
   gem 'simplecov', '~> 0.17.1', require: false
 end
