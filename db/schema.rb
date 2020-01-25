@@ -31,7 +31,6 @@ ActiveRecord::Schema.define(version: 2020_01_25_164715) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["author_id"], name: "index_books_on_author_id"
-    t.index ["title"], name: "index_books_on_title", unique: true
   end
 
   create_table "users", force: :cascade do |t|
