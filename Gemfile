@@ -16,6 +16,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   gem 'bullet', '~> 6.0.2'
+  gem 'factory_bot_rails', '~> 5.1.1'
   gem 'faker', '~> 2.10.1'
   gem 'pry-byebug', '~> 3.7.0'
   gem 'rspec-rails', '~> 3.9.0'
@@ -34,7 +35,6 @@ end
 
 group :test do
   gem 'database_cleaner', '~> 1.7.0'
-  gem 'factory_bot_rails', '~> 5.1.1'
   gem 'shoulda-matchers', '~> 4.2.0'
   gem 'simplecov', '~> 0.17.1', require: false
 end
