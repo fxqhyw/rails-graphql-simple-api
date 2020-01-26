@@ -1,3 +1,4 @@
 en:
   errors:
     unauthenticated: Authentication failed
+    need_auth: You need to authenticate for perform this action

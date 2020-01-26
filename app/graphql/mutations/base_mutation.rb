@@ -4,5 +4,11 @@ module Mutations
     field_class Types::BaseField
     input_object_class Types::BaseInputObject
     object_class Types::BaseObject
+
+    def check_authentication!
+      return if context[:current_user]
+
+      raise GraphQL::ExecutionError, I18n.t('errors.need_auth')
+    end
   end
 end
