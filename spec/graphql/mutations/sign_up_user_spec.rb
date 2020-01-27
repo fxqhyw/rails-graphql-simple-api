@@ -15,14 +15,13 @@ RSpec.describe Mutations::SignUpUser, type: :request do
               id
               email
             }
-            errors
           }
         }
       GQL
     end
     let(:params) { { query: query, variables: variables } }
-    let(:response_user) { JSON.parse(response.body)['data']['signUpUser']['user'] }
-    let(:response_errors) { JSON.parse(response.body)['data']['signUpUser']['errors'] }
+    let(:response_user) { JSON.parse(response.body)['data']['signUpUser'] }
+    let(:response_errors) { JSON.parse(response.body)['errors'] }
 
     context 'when params is valid' do
       let(:variables) { attributes_for(:user) }
@@ -35,9 +34,8 @@ RSpec.describe Mutations::SignUpUser, type: :request do
 
       it 'returns a user' do
         post '/graphql', params: params
-        expect(response_user).to include(
-          'id'    => be_present,
-          'email' => variables[:email]
+        expect(response_user).to match(
+          'user' => { 'id' => be_present, 'email' => variables[:email] }
         )
       end
 
@@ -49,6 +47,24 @@ RSpec.describe Mutations::SignUpUser, type: :request do
 
     context 'when params is invalid' do
       let(:variables) { { email: '', nickname: '', password: '123456' } }
+      let(:errors) do
+        [
+          {
+            'message' => "can't be blank",
+            'extensions' => {
+              'code' => 'INPUT_ERROR',
+              'attribute' => 'nickname'
+            }
+          },
+          {
+            'message' => "can't be blank",
+            'extensions' => {
+              'code' => 'INPUT_ERROR',
+              'attribute' => 'email'
+            }
+          }
+        ]
+      end
 
       it 'does not create a user' do
         expect do
@@ -63,7 +79,7 @@ RSpec.describe Mutations::SignUpUser, type: :request do
 
       it 'returns errors' do
         post '/graphql', params: params
-        expect(response_errors).to match(["Nickname can't be blank", "Email can't be blank"])
+        expect(response_errors).to match(errors)
       end
     end
   end

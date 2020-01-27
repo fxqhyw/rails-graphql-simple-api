@@ -10,5 +10,13 @@ module Mutations
 
       raise GraphQL::ExecutionError, I18n.t('errors.need_auth')
     end
+
+    def validation_errors!(object)
+      object.errors.map do |attr, message|
+        message = object[attr] + ' ' + message if object[attr].present?
+        context.add_error(GraphQL::ExecutionError.new(message, extensions: { code: 'INPUT_ERROR', attribute: attr }))
+      end
+      return
+    end
   end
 end
