@@ -45,7 +45,7 @@ RSpec.describe Mutations::SignUpUser, type: :request do
       end
     end
 
-    context 'when params is invalid' do
+    context 'when required params are empty' do
       let(:variables) { { email: '', nickname: '', password: '123456' } }
       let(:errors) do
         [
@@ -75,6 +75,34 @@ RSpec.describe Mutations::SignUpUser, type: :request do
       it 'does not return any user' do
         post '/graphql', params: params
         expect(response_user).to be_nil
+      end
+
+      it 'returns errors' do
+        post '/graphql', params: params
+        expect(response_errors).to match(errors)
+      end
+    end
+
+    context 'when params are empty' do
+      let(:user) { create(:user) }
+      let(:variables) { { email: user.email, nickname: user.nickname, password: user.password } }
+      let(:errors) do
+        [
+          {
+            'message' => "#{variables[:nickname]} has already been taken",
+            'extensions' => {
+              'code' => 'INPUT_ERROR',
+              'attribute' => 'nickname'
+            }
+          },
+          {
+            'message' => "#{variables[:email]} has already been taken",
+            'extensions' => {
+              'code' => 'INPUT_ERROR',
+              'attribute' => 'email'
+            }
+          }
+        ]
       end
 
       it 'returns errors' do
