@@ -1,5 +1,5 @@
 module Mutations
-  class SignUpUser < BaseMutation
+  class CreateAuthor < BaseMutation
     argument :first_name, String, required: true
     argument :first_name, String, required: true
 

@@ -1,5 +1,5 @@
 module Queries
-  class Books < Queries::BaseQuery
+  class Books < BaseQuery
     description 'Find all books'
 
     type [Types::BookType], null: false

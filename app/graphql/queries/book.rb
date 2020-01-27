@@ -1,5 +1,5 @@
 module Queries
-  class Book < Queries::BaseQuery
+  class Book < BaseQuery
     description 'Find a book by ID'
 
     argument :id, ID, required: true
