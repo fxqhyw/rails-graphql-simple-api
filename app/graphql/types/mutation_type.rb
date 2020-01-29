@@ -5,5 +5,6 @@ module Types
     field :create_author, mutation: Mutations::CreateAuthor
     field :create_book, mutation: Mutations::CreateBook
     field :update_book, mutation: Mutations::UpdateBook
+    field :update_author, mutation: Mutations::UpdateAuthor
   end
 end
