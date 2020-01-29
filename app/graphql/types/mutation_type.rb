@@ -7,5 +7,6 @@ module Types
     field :update_book, mutation: Mutations::UpdateBook
     field :update_author, mutation: Mutations::UpdateAuthor
     field :delete_book, mutation: Mutations::DeleteBook
+    field :delete_author, mutation: Mutations::DeleteAuthor
   end
 end
