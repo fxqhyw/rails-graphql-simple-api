@@ -39,10 +39,7 @@ RSpec.describe Mutations::SignUpUser, type: :request do
         )
       end
 
-      it 'does not returns any errors' do
-        post '/graphql', params: params
-        expect(response_errors).to be_nil
-      end
+      include_examples 'returns no errors'
     end
 
     context 'when required params are empty' do
@@ -77,13 +74,10 @@ RSpec.describe Mutations::SignUpUser, type: :request do
         expect(response_user).to be_nil
       end
 
-      it 'returns errors' do
-        post '/graphql', params: params
-        expect(response_errors).to match(errors)
-      end
+      include_examples 'returns errors'
     end
 
-    context 'when params are empty' do
+    context 'when params values are taken' do
       let(:user) { create(:user) }
       let(:variables) { { email: user.email, nickname: user.nickname, password: user.password } }
       let(:errors) do
@@ -105,10 +99,7 @@ RSpec.describe Mutations::SignUpUser, type: :request do
         ]
       end
 
-      it 'returns errors' do
-        post '/graphql', params: params
-        expect(response_errors).to match(errors)
-      end
+      include_examples 'returns errors'
     end
   end
 end

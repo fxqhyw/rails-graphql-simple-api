@@ -7,11 +7,11 @@ module Mutations
 
     field :author, Types::AuthorType, null: true
 
-    def resolve(id:, **args)
+    def resolve(id:, **attributes)
       check_authentication!
 
       author = Author.find(id)
-      author.update(args) ? { author: author } : validation_errors!(author)
+      author.update(attributes) ? { author: author } : validation_errors!(author)
     rescue ActiveRecord::RecordNotFound => e
       raise GraphQL::ExecutionError, e.message
     end

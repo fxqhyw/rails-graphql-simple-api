@@ -8,11 +8,11 @@ module Mutations
 
     field :book, Types::BookType, null: true
 
-    def resolve(id:, **args)
+    def resolve(id:, **attributes)
       check_authentication!
 
       book = Book.find(id)
-      book.update(args) ? { book: book } : validation_errors!(book)
+      book.update(attributes) ? { book: book } : validation_errors!(book)
     rescue ActiveRecord::RecordNotFound => e
       raise GraphQL::ExecutionError, e.message
     end
