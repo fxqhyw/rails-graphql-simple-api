@@ -1,9 +1,10 @@
-RSpec.describe Mutations::CreateAuthor, type: :request do
+RSpec.describe Mutations::UpdateAuthor, type: :request do
   describe '#resolve' do
     let(:query) do
       <<~GQL
-        mutation($first_name: String!, $last_name: String!, $bio: String) {
-          createAuthor(input: {
+        mutation($id: ID!, $first_name: String!, $last_name: String!, $bio: String) {
+          updateAuthor(input: {
+            id: $id
             firstName: $first_name,
             lastName: $last_name,
             bio: $bio
@@ -18,24 +19,19 @@ RSpec.describe Mutations::CreateAuthor, type: :request do
         }
       GQL
     end
-    let(:params) { { query: query, variables: variables } }
+    let(:author) { create(:author) }
     let(:auth_header) { valid_token_header(create(:user).id) }
-    let(:response_author) { JSON.parse(response.body)['data']['createAuthor'] }
+    let(:params) { { query: query, variables: variables } }
+    let(:response_author) { JSON.parse(response.body)['data']['updateAuthor'] }
     let(:response_errors) { JSON.parse(response.body)['errors'] }
 
     context 'when params is valid' do
-      let(:variables) { attributes_for(:author) }
-
-      it 'creates an author' do
-        expect do
-          post '/graphql', params: params, headers: auth_header
-        end.to change(Author, :count).from(0).to(1)
-      end
+      let(:variables) { attributes_for(:author).merge('id' => author.id) }
 
       it 'returns an author' do
         post '/graphql', params: params, headers: auth_header
         expect(response_author).to match(
-          'author' => { 'id' => be_present, 'firstName' => variables[:first_name], 'lastName' => variables[:last_name] }
+          'author' => { 'id' => author.id.to_s, 'firstName' => variables[:first_name], 'lastName' => variables[:last_name] }
         )
       end
 
@@ -43,7 +39,7 @@ RSpec.describe Mutations::CreateAuthor, type: :request do
     end
 
     context 'when required params are empty' do
-      let(:variables) { { last_name: '', first_name: '' } }
+      let(:variables) { { id: author.id, last_name: '', first_name: '' } }
       let(:errors) do
         [
           {
@@ -61,12 +57,6 @@ RSpec.describe Mutations::CreateAuthor, type: :request do
             }
           }
         ]
-      end
-
-      it 'does not create an author' do
-        expect do
-          post '/graphql', params: params, headers: auth_header
-        end.not_to change(Author, :count)
       end
 
       it 'does not return any author' do

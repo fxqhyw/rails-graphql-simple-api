@@ -20,6 +20,7 @@ RSpec.describe Mutations::SignUpUser, type: :request do
       GQL
     end
     let(:params) { { query: query, variables: variables } }
+    let(:auth_header) { empty_auth_header }
     let(:response_user) { JSON.parse(response.body)['data']['signUpUser'] }
     let(:response_errors) { JSON.parse(response.body)['errors'] }
 
@@ -74,7 +75,7 @@ RSpec.describe Mutations::SignUpUser, type: :request do
         expect(response_user).to be_nil
       end
 
-      include_examples 'returns errors'
+      include_examples 'returns validation errors'
     end
 
     context 'when params values are taken' do
@@ -99,7 +100,7 @@ RSpec.describe Mutations::SignUpUser, type: :request do
         ]
       end
 
-      include_examples 'returns errors'
+      include_examples 'returns validation errors'
     end
   end
 end
