@@ -4,10 +4,8 @@ RSpec.describe Mutations::SignInUser, type: :request do
       <<~GQL
         mutation($email: String!, $password: String!) {
           signInUser(input: {
-            authInput: {
-              email: $email,
-              password: $password
-            }
+            email: $email,
+            password: $password
           }
         ) {
             user {
