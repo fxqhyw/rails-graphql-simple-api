@@ -2,7 +2,7 @@ RSpec.describe Mutations::UpdateAuthor, type: :request do
   describe '#resolve' do
     let(:query) do
       <<~GQL
-        mutation($id: ID!, $first_name: String!, $last_name: String!, $bio: String) {
+        mutation($id: ID!, $first_name: String, $last_name: String, $bio: String) {
           updateAuthor(input: {
             id: $id
             firstName: $first_name,
