@@ -22,10 +22,11 @@ RSpec.describe Mutations::CreateAuthor, type: :request do
     let(:auth_header) { valid_token_header(create(:user).id) }
     let(:response_author) { JSON.parse(response.body)['data']['createAuthor'] }
     let(:response_errors) { JSON.parse(response.body)['errors'] }
+    let(:variables) { attributes_for(:author) }
+
+    include_examples 'invalid auth token'
 
     context 'when params is valid' do
-      let(:variables) { attributes_for(:author) }
-
       it 'creates an author' do
         expect do
           post '/graphql', params: params, headers: auth_header

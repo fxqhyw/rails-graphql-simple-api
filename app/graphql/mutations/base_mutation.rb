@@ -8,7 +8,7 @@ module Mutations
     def check_authentication!
       return if context[:current_user]
 
-      raise GraphQL::ExecutionError, I18n.t('errors.need_auth')
+      raise GraphQL::ExecutionError.new(I18n.t('errors.unauthenticated'), extensions: { code: 'AUTHENTICATION_ERROR' })
     end
 
     def validation_errors!(object)

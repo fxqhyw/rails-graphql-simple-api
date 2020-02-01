@@ -24,10 +24,11 @@ RSpec.describe Mutations::UpdateAuthor, type: :request do
     let(:params) { { query: query, variables: variables } }
     let(:response_author) { JSON.parse(response.body)['data']['updateAuthor'] }
     let(:response_errors) { JSON.parse(response.body)['errors'] }
+    let(:variables) { attributes_for(:author).merge('id' => author.id) }
+
+    include_examples 'invalid auth token'
 
     context 'when params is valid' do
-      let(:variables) { attributes_for(:author).merge('id' => author.id) }
-
       it 'returns an author' do
         post '/graphql', params: params, headers: auth_header
         expect(response_author).to match(

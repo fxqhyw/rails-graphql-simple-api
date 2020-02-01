@@ -51,7 +51,7 @@ RSpec.describe Mutations::SignInUser, type: :request do
       end
 
       it 'returns authentication error' do
-        expect(response_errors.last['message']).to eq('Authentication failed')
+        expect(response_errors.last['message']).to eq('You need to authenticate for perform this action')
       end
     end
   end
