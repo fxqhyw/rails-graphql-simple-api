@@ -1,5 +1,5 @@
 class Book < ApplicationRecord
-  searchkick hughlight: %i[title description]
+  searchkick highlight: %i[title description]
 
   belongs_to :author
 
