@@ -8,6 +8,8 @@ module Queries
 
     def resolve(id:)
       ::Author.find(id)
+    rescue ActiveRecord::RecordNotFound => e
+      raise GraphQL::ExecutionError, e.message
     end
   end
 end
