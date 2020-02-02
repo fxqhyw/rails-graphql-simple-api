@@ -1,9 +1,10 @@
-RSpec.describe Mutations::CreateBook, type: :request do
+RSpec.describe Mutations::UpdateBook, type: :request do
   describe '#resolve' do
     let(:query) do
       <<~GQL
-        mutation($title: String!, $description: String, $author_id: ID!) {
-          createBook(input: {
+        mutation($id: ID!, $title: String, $description: String, $author_id: ID) {
+          updateBook(input: {
+            id: $id,
             title: $title,
             description: $description,
             authorId: $author_id
@@ -12,6 +13,7 @@ RSpec.describe Mutations::CreateBook, type: :request do
             book {
               id
               title
+              description
               author {
                 id
                 firstName
@@ -23,29 +25,25 @@ RSpec.describe Mutations::CreateBook, type: :request do
       GQL
     end
     let(:author) { create(:author) }
+    let(:book) { create(:book) }
     let(:params) { { query: query, variables: variables } }
     let(:auth_header) { valid_token_header(create(:user).id) }
-    let(:response_book) { JSON.parse(response.body)['data']['createBook'] }
+    let(:response_book) { JSON.parse(response.body)['data']['updateBook'] }
     let(:response_errors) { JSON.parse(response.body)['errors'] }
-    let(:variables) { attributes_for(:book).merge(author_id: author.id) }
+    let(:variables) { attributes_for(:book).merge(id: book.id, author_id: author.id) }
 
     include_examples 'invalid auth token'
 
     context 'when params is valid' do
-      it 'creates a book' do
-        expect do
-          post '/graphql', params: params, headers: auth_header
-        end.to change(Book, :count).from(0).to(1)
-      end
-
-      it 'returns a book and author' do
+      it 'returns updated book and author' do
         post '/graphql', params: params, headers: auth_header
         expect(response_book).to match(
           'book' => {
-            'id' => be_present,
+            'id' => book.id.to_s,
             'title' => variables[:title],
+            'description' => variables[:description],
             'author' => {
-              'id' => author.id.to_s,
+              'id' => variables[:author_id].to_s,
               'firstName' => author.first_name,
               'lastName' => author.last_name
             }
@@ -57,7 +55,7 @@ RSpec.describe Mutations::CreateBook, type: :request do
     end
 
     context 'when params are invalid' do
-      let(:variables) { { title: '', author_id: 111 } }
+      let(:variables) { { id: book.id, title: '', author_id: 111 } }
       let(:errors) do
         [
           {
@@ -75,12 +73,6 @@ RSpec.describe Mutations::CreateBook, type: :request do
             }
           }
         ]
-      end
-
-      it 'does not create a book' do
-        expect do
-          post '/graphql', params: params, headers: auth_header
-        end.not_to change(Book, :count)
       end
 
       it 'does not return any book' do
