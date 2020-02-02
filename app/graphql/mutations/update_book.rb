@@ -3,7 +3,6 @@ module Mutations
     argument :id, ID, required: true
     argument :title, String, required: false
     argument :description, String, required: false
-    argument :publication_year, Integer, required: false
     argument :author_id, ID, required: false
 
     field :book, Types::BookType, null: true
