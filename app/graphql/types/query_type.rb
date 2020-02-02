@@ -1,8 +1,7 @@
 module Types
   class QueryType < Types::BaseObject
     field :author, resolver: Queries::Author
-    field :authors, resolver: Queries::Authors
     field :book, resolver: Queries::Book
-    field :books, resolver: Queries::Books
+    field :search_books, resolver: Queries::SearchBooks
   end
 end
