@@ -2,26 +2,26 @@ RSpec.describe Queries::Book, type: :request do
   describe '#resolve' do
     let(:query) do
       <<~GQL
-        mutation($id: ID!) {
-          query {
-            book(
-              id: $id
-            ) {
+        query($id: ID!) {
+          book(
+            id: $id
+          ) {
+            id
+            title
+            description
+            author {
               id
-              title
-              description
-              author {
-                id
-                firstName
-                lastName
-              }
+              firstName
+              lastName
             }
           }
         }
       GQL
     end
     let(:book) { create(:book) }
+    let(:auth_header) { empty_auth_header }
     let(:params) { { query: query, variables: variables } }
+    let(:response_data) { JSON.parse(response.body)['data'] }
     let(:response_book) { JSON.parse(response.body)['data']['book'] }
     let(:response_errors) { JSON.parse(response.body)['errors'] }
     let(:variables) { { id: book.id } }
@@ -30,15 +30,13 @@ RSpec.describe Queries::Book, type: :request do
       it 'returns the book' do
         post '/graphql', params: params
         expect(response_book).to match(
-          'book' => {
-            'id' => book.id.to_s,
-            'title' => book.title,
-            'description' => book.description,
-            'author' => {
-              'id' => book.author_id.to_s,
-              'firstName' => book.author.first_name,
-              'lastName' => book.author.last_name
-            }
+          'id' => book.id.to_s,
+          'title' => book.title,
+          'description' => book.description,
+          'author' => {
+            'id' => book.author_id.to_s,
+            'firstName' => book.author.first_name,
+            'lastName' => book.author.last_name
           }
         )
       end
@@ -59,8 +57,8 @@ RSpec.describe Queries::Book, type: :request do
         )
       end
 
-      it 'does not return any book' do
-        expect(response_book).to be_nil
+      it 'does not return any data' do
+        expect(response_data).to be_nil
       end
     end
   end
