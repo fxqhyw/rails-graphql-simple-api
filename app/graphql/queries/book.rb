@@ -9,7 +9,7 @@ module Queries
     def resolve(id:)
       ::Book.find(id)
     rescue ActiveRecord::RecordNotFound => e
-      raise GraphQL::ExecutionError, e.message
+      raise GraphQL::ExecutionError.new(e.message, extensions: { code: Constants::INPUT_ERROR })
     end
   end
 end

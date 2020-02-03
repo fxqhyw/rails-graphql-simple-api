@@ -8,13 +8,15 @@ module Mutations
     def check_authentication!
       return if context[:current_user]
 
-      raise GraphQL::ExecutionError.new(I18n.t('errors.unauthenticated'), extensions: { code: 'AUTHENTICATION_ERROR' })
+      raise GraphQL::ExecutionError.new(I18n.t('errors.unauthenticated'),
+                                        extensions: { code: Constants::AUTHENTICATION_ERROR })
     end
 
     def validation_errors!(object)
       object.errors.map do |attr, message|
         message = object[attr] + ' ' + message if object[attr].present?
-        context.add_error(GraphQL::ExecutionError.new(message, extensions: { code: 'INPUT_ERROR', attribute: attr }))
+        context.add_error(GraphQL::ExecutionError.new(message, extensions: { code: Constants::INPUT_ERROR,
+                                                                             attribute: attr }))
       end
       return
     end

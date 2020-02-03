@@ -61,14 +61,14 @@ RSpec.describe Mutations::UpdateBook, type: :request do
           {
             'message' => 'must exist',
             'extensions' => {
-              'code' => 'INPUT_ERROR',
+              'code' => Constants::INPUT_ERROR,
               'attribute' => 'author'
             }
           },
           {
             'message' => "can't be blank",
             'extensions' => {
-              'code' => 'INPUT_ERROR',
+              'code' => Constants::INPUT_ERROR,
               'attribute' => 'title'
             }
           }

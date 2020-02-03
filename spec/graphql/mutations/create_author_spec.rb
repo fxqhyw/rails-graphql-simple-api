@@ -50,14 +50,14 @@ RSpec.describe Mutations::CreateAuthor, type: :request do
           {
             'message' => "can't be blank",
             'extensions' => {
-              'code' => 'INPUT_ERROR',
+              'code' => Constants::INPUT_ERROR,
               'attribute' => 'first_name'
             }
           },
           {
             'message' => "can't be blank",
             'extensions' => {
-              'code' => 'INPUT_ERROR',
+              'code' => Constants::INPUT_ERROR,
               'attribute' => 'last_name'
             }
           }

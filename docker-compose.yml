@@ -11,6 +11,8 @@ services:
       - 5432
     volumes:
       - postgres:/var/lib/postgresql/data
+    depends_on:
+      - elasticsearch
 
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
